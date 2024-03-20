@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculateur de Frais de Livraison</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        width: 80%;
+        margin: 20px auto;
+        background-color: #E1EEF7;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 40px; 
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .total {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #e6e6e6;
+        border-radius: 5px;
+    }
+    .total-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Combien cela me coûtera-t-il ?</h2>
+    
+    <div class="form-group">
+        <label for="weight">Poids du colis</label>
+        <input type="number" id="weight" name="weight" value="300">
+        <small>La limite de poids du colis est 999kg</small>
+    </div>
+    
+    <div class="form-group">
+        <label for="country">Envoyer en</label>
+        <select id="country" name="country">
+            <option value="gabon">Gabon</option>
+            <option value="france">France</option>
+            <!-- Add other countries here -->
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="shipping-method">Choisissez une méthode d'envoi
+            <i class="fas fa-info-circle" id="info-icon"></i>
+            <span class="tooltip" id="info-tooltip" style="display: none;"> prix supplémentaire.</span>
+        </label>
+        <select id="shipping-method" name="shipping_method">
+            <option value="standard">UPS 2-6 jours</option>
+            <option value="rapide">UPS 1-3 jours</option>
+            <option value="light">UPS économique</option>
+        </select>
+    </div>
+    
+    
+    <div class="total">
+        <div class="total-item">
+            <span>Prix de l'article:</span>
+            <span>€2,949</span>
+        </div>
+        <div class="total-item">
+            <span>Frais ZenMarket:</span>
+            <span>€300</span>
+        </div>
+        <div class="total-item">
+            <span>Envoi international:</span>
+            <span>€5,720</span>
+        </div>
+        <div class="total-item" style="font-weight: bold;">
+      <span>Total:</span>
+      <span  id = "total" > 885</span>
+    </div>
+  </div>
+</div>
+
+<script>
+    // Fonctions de calcul fictives pour démontrer la dynamique
+    // Dans la pratique, ces fonctions devraient interroger une API serveur ou suivre des règles de tarification complexes
+    function calculateShipping(weight, country, method) {
+        // Tarif de base par pays et méthode d'expédition, à titre d'exemple
+        const baseRates = {
+            "gabon": { "standard": 5000, "rapide": 8000, "light": 3000 },
+            "france": { "standard": 2500, "rapide": 4000, "light": 2000 }
+        };
+    
+        // Tarif de base selon le poids supplémentaire
+        const weightRate = 10; // Yen par gramme supplémentaire
+    
+        // Calcule le tarif de base selon le pays et la méthode
+        let baseRate = baseRates[country][method];
+    
+        // Ajoute le tarif selon le poids
+        return baseRate + (weight * weightRate);
+    }
+    
+    function calculateZenMarketFee() {
+        // Retourne les frais fixes de ZenMarket
+        return 300;
+    }
+    
+    function updateTotal() {
+        const weight = parseInt(document.getElementById('weight').value, 10);
+        const country = document.getElementById('country').value;
+        const method = document.getElementById('shipping-method').value;
+        
+        const shippingCost = calculateShipping(weight, country, method);
+        const zenMarketFee = calculateZenMarketFee();
+        const articlePrice = 2949; // Prix fixe pour cet exemple
+    
+        // Calcul du total
+        const total = shippingCost + zenMarketFee + articlePrice;
+    
+        // Mise à jour de l'interface utilisateur
+        document.getElementById('total').textContent = `€${total}`;
+    }
+    
+    // Événements pour mettre à jour le total lorsque les valeurs changent
+    document.getElementById('weight').addEventListener('change', updateTotal);
+    document.getElementById('country').addEventListener('change', updateTotal);
+    document.getElementById('shipping-method').addEventListener('change', updateTotal);
+    
+    // Mise à jour initiale du total au chargement de la page
+    updateTotal();
+    </script>
+
+    <script>
+        document.getElementById('info-icon').addEventListener('click', function() {
+            var tooltip = document.getElementById('info-tooltip');
+            if (tooltip.style.display === 'none') {
+                tooltip.style.display = 'inline-block';
+            } else {
+                tooltip.style.display = 'none';
+            }
+        });
+    </script>
+    
+    
+</body>
+</html>

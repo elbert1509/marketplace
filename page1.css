@@ -1,0 +1,36 @@
+.tooltip {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    background-color: #f9f9f9;
+    display: inline-block;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px; /* Should be half of the width to center it */
+    width: 120px; /* Adjust width as needed */
+    text-align: center;
+    /* Hide the tooltip initially */
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #f9f9f9 transparent transparent transparent;
+}
+
+/* Show the tooltip text when hovering over the icon */
+#info-icon:hover + .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
